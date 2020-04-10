@@ -1,0 +1,8 @@
+postgres_primary_data/*
+postgres_replica_data/*
+.vscode/
+.pg_env
+
+# add .gitkeep to keep folder for the docker volumes
+!postgres_primary_data/.gitkeep
+!postgres_replica_data/.gitkeep
