@@ -8,7 +8,7 @@ services:
         volumes:
             - ./postgres_primary_data:/var/lib/postgresql/data
         ports:
-            - "5432:5432"
+            - "5432:5432" #for debugging
         networks:
             postgres-network:
                 ipv4_address: 172.21.0.2
@@ -19,7 +19,7 @@ services:
         volumes:
             - ./postgres_replica_data:/var/lib/postgresql/data
         ports:
-            - "8000:5432"
+            - "8000:5432" #for debugging
         depends_on:
             - pg-primary
         networks:
