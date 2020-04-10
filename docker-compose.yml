@@ -22,6 +22,11 @@ services:
             - "8000:5432" #for debugging
         depends_on:
             - pg-primary
+        command: bash -c "echo 172.21.0.2:5432:testdb:repuser:testpass > /var/lib/postgresql/.pgpass && 
+                          rm -rf /var/lib/postgresql/data/* && 
+                          su postgres -c \"pg_basebackup -h 172.21.0.2 -D /var/lib/postgresql/data -U repuser -vP -w && 
+                          touch /var/lib/postgresql/data/standby.signal &&
+                          postgres\""
         networks:
             postgres-network:
                 ipv4_address: 172.21.0.3

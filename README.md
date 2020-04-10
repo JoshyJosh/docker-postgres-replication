@@ -5,13 +5,17 @@ Current replica setup is set for asynchronous replication
 
 postgres.conf snapshots are on postgres-confs folder
 
+THIS IS A TEST SETUP, due to the lack of `.pgpass` password recognition in this setup, there is a lack of an additional layer of security. More reasearch is needed as to why this occurs
+
 # TODO:
 
 Need to automate initial call for replications.
 
-- automate replication call for `rm -rf /var/lib/postgresql/data` and `pg_basebackup -h <PRIMARY_IP> -D <DATA_DIRECTORY> -U repuser -vP -W` and `touch standby_signal` in data folder.
-- Consider use of pgpass
+- automate replication call for `rm -rf /var/lib/postgresql/data` and `pg_basebackup -h <PRIMARY_IP> -D <DATA_DIRECTORY> -U repuser -vP -W` and `touch standby.signal` in data folder.
+- Consider use of `.pgpass` (SUBNOTE: could not get `.pgpass` method to work, pg_basebackup recognizes file location but ignores password entry. Could be due to password encryption)
 - add env to toggle synchronous and asynchronous
+- create replica swarm
+- deal with `specified neither primary_conninfo nor restore_command` warning
 
 # Sources
 
