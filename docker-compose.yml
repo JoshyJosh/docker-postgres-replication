@@ -23,9 +23,13 @@ services:
         depends_on:
             - pg-primary
         command: bash -c "echo 172.21.0.2:5432:testdb:repuser:testpass > /var/lib/postgresql/.pgpass && 
+                          chmod 0600 /var/lib/postgresql/.pgpass &&
+                          chown -R postgres:postgres /var/lib/postgresql/data &&
                           rm -rf /var/lib/postgresql/data/* && 
                           su postgres -c \"pg_basebackup -h 172.21.0.2 -D /var/lib/postgresql/data -U repuser -vP -w && 
                           touch /var/lib/postgresql/data/standby.signal &&
+                          echo primary_conninfo = \'host=172.21.0.2 port=5432 user=repuser password=testpass application_name=r1\' >> /var/lib/postgresql/data/postgresql.conf &&
+                          echo primary_slot_name = \'replica_1_slot\' >> /var/lib/postgresql/data/postgresql.conf &&
                           postgres\""
         networks:
             postgres-network:

@@ -3,9 +3,14 @@
 As of postgres 12 recovery.conf has been substituted for standby.signal and standby.
 Current replica setup is set for asynchronous replication
 
-postgres.conf snapshots are on postgres-confs folder
+postgresql.conf snapshots are on postgres-confs folder
+
+postgresql.conf.example is the default generated  postgresql.conf
 
 THIS IS A TEST SETUP, due to the lack of `.pgpass` password recognition in this setup, there is a lack of an additional layer of security. More reasearch is needed as to why this occurs
+
+# Setup:
+Copy or modify `.pg_env.example` to `.pg_env`
 
 # TODO:
 
@@ -17,7 +22,7 @@ Need to automate initial call for replications.
 - create replica swarm
 - deal with `specified neither primary_conninfo nor restore_command` warning
 
-# Sources
+# Sources:
 
 - https://docs.timescale.com/latest/tutorials/replication#replication-modes
 - https://www.2ndquadrant.com/en/blog/replication-configuration-changes-in-postgresql-12/
