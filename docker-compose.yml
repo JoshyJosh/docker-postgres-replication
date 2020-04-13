@@ -41,6 +41,7 @@ services:
                           chmod 0600 /var/lib/postgresql/.pgpass &&
                           chown -R postgres:postgres /var/lib/postgresql/data &&
                           rm -rf /var/lib/postgresql/data/* && 
+                          sleep 2 &&
                           su postgres -c \"pg_basebackup -h 172.21.0.2 -D /var/lib/postgresql/data -U repuser -vP -w && 
                           touch /var/lib/postgresql/data/standby.signal &&
                           echo primary_conninfo = \'host=172.21.0.2 port=5432 user=repuser password=testpass application_name=r1\' >> /var/lib/postgresql/data/postgresql.conf &&
