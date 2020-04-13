@@ -4,7 +4,7 @@ pgloop=true
 while [ "$pgloop" = true ]
 do
     pg_basebackup -h 172.21.0.2 -D /var/lib/postgresql/data -U repuser -vP -w 
-    if [ "$?" -ne "0"]; then
+    if [ "$?" -ne "0" ]; then
         echo "retrying pg_basebackup"
     else
         pgloop=false
