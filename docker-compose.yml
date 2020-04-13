@@ -7,8 +7,23 @@ services:
         env_file: .pg_env
         volumes:
             - ./postgres_primary_data:/var/lib/postgresql/data
+            - ./sql_statements:/app
         ports:
             - "5432:5432" #for debugging
+        command: bash -c "rm -rf /var/lib/postgresql/data/* &&
+                          chown -R postgres:postgres /var/lib/postgresql/data &&
+                          su postgres -c \"pg_ctl init &&
+                          echo host replication all 172.21.0.3/32 trust >> /var/lib/postgresql/data/pg_hba.conf &&
+                          pg_ctl start &&
+                          psql -f /app/add_replication_user.sql &&
+                          echo wal_level = replica >> /var/lib/postgresql/data/postgresql.conf &&
+                          echo max_wal_senders = 10 >> /var/lib/postgresql/data/postgresql.conf &&
+                          echo max_replication_slots = 10 >> /var/lib/postgresql/data/postgresql.conf &&
+                          echo synchronous_commit = off >> /var/lib/postgresql/data/postgresql.conf &&
+                          pg_ctl restart &&
+                          psql -f /app/add_replication_slot.sql &&
+                          pg_ctl stop &&
+                          postgres\""
         networks:
             postgres-network:
                 ipv4_address: 172.21.0.2
@@ -30,6 +45,8 @@ services:
                           touch /var/lib/postgresql/data/standby.signal &&
                           echo primary_conninfo = \'host=172.21.0.2 port=5432 user=repuser password=testpass application_name=r1\' >> /var/lib/postgresql/data/postgresql.conf &&
                           echo primary_slot_name = \'replica_1_slot\' >> /var/lib/postgresql/data/postgresql.conf &&
+                          echo max_wal_senders = 10 >> /var/lib/postgresql/data/postgresql.conf &&
+                          echo max_replication_slots = 10 >> /var/lib/postgresql/data/postgresql.conf &&
                           postgres\""
         networks:
             postgres-network:
